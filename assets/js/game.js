@@ -4,25 +4,44 @@
 //      * Defeat each enemy-robot
 // "LOSE" - PLayer robot's health is zero or less
 
+var fightOrSkip = function () {
+    // ask player if they'd like to fight or skip using fightOrSkip function
+    var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
+
+    // Conditional Recursive Function Call
+    if (promptFight === "" || promptFight === null) {
+        window.alert("You need to provide a valid answer! Please try again.");
+        return fightOrSkip();
+    }
+
+    // if player picks "skip" confirm and then stop the loop
+    promptFight = promptFight.toLowerCase();
+
+    if (promptFight === "skip") {
+        // confirm player wants to skip
+        var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+
+        // if yes (true), leave fight
+        if (confirmSkip) {
+            window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+            // subtract money from playerMoney for skipping, but don't let them go into the negative
+            playerInfo.money = Math.max(0, playerInfo.money - 10);
+
+            // return true if player wants to leave
+            return true;
+        }
+    }
+    return false;
+}
+
 var fight = function (enemy) {
 
+    // repeat and execute as long as the enemy-robot is alive 
     while (playerInfo.health > 0 && enemy.health > 0) {
-        // ask player if they'd like to fight or run
-        var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
-
-        // if player picks "skip" confirm and then stop the loop
-        if (promptFight === "skip" || promptFight === "SKIP") {
-            // confirm player wants to skip
-            var confirmSkip = window.confirm("Are you sure you'd like to quit?");
-
-            // if yes (true), leave fight
-            if (confirmSkip) {
-                window.alert(playerInfo.name + ' has decided to skip this fight. Goodbye!');
-                // subtract money from playerMoney for skipping
-                playerInfo.money = Math.max(0, playerInfo.money - 10);
-                console.log("playerInfo.money", playerInfo.money)
-                break;
-            }
+        // ask player if they'd like to fight or skip using fightOrSkip function
+        if (fightOrSkip()) {
+          // if true, leave fight by breaking loop
+          break;
         }
 
         // generate random damage value based on player's attack power
@@ -130,13 +149,13 @@ var shop = function () {
     );
     switch (shopOptionPrompt) {
         case "REFILL":
-            case "refill":
-              playerInfo.refillHealth();
-              break;
-            case "UPGRADE":
-            case "upgrade":
-              playerInfo.upgradeAttack();
-              break;
+        case "refill":
+            playerInfo.refillHealth();
+            break;
+        case "UPGRADE":
+        case "upgrade":
+            playerInfo.upgradeAttack();
+            break;
         case "UPGRADE": // new case
         case "upgrade":
             if (playerInfo.money >= 7) {
@@ -169,12 +188,12 @@ var randomNumber = function (min, max) {
 };
 
 // Function to set name
-var getPlayerName = function() {
+var getPlayerName = function () {
     var name = "";
 
     while (name === "" || name === null) {
         name = prompt("What is your robot's name?");
-      }
+    }
 
     console.log("Your robot's name is " + name);
     return name;
@@ -210,21 +229,21 @@ var playerInfo = {
             window.alert("You don't have enough money!");
         }
     }
-};    
+};
 
 var enemyInfo = [
-        {
-            name: "Roborto",
-            attack: randomNumber(10, 14)
-        },
-        {
-            name: "Amy Android",
-            attack: randomNumber(10, 14)
-        },
-        {
-            name: "Robo Trumble",
-            attack: randomNumber(10, 14)
-        }
-    ];
+    {
+        name: "Roborto",
+        attack: randomNumber(10, 14)
+    },
+    {
+        name: "Amy Android",
+        attack: randomNumber(10, 14)
+    },
+    {
+        name: "Robo Trumble",
+        attack: randomNumber(10, 14)
+    }
+];
 
-    startGame();
+startGame();
